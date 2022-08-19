@@ -17,7 +17,7 @@ const StakeRewardNCM = ({ signer, accountAddress }) => {
     signer
   );
   const StakeNCMTContract = new ethers.Contract(
-    "0xAD2b22A857822d7f9eca9230c8b43C9CD5e58280",
+    "0xAe2F84351aB1dd6305065C03EbC3AAAACFd115FC",
     StakeNCMT,
     signer
   );
@@ -36,9 +36,8 @@ const StakeRewardNCM = ({ signer, accountAddress }) => {
         }
       }
       checkApprove();
-      setInterval(() => {
-        readData();
-      }, 5000);
+
+      readData();
     }
   }, [accountAddress]);
 
@@ -61,6 +60,9 @@ const StakeRewardNCM = ({ signer, accountAddress }) => {
     await StakeNCMTContract.stakeToken(
       ethers.utils.parseUnits(`${amount}`, 18)
     );
+    StakeNCMTContract.on("Staked", (from, amount, event) => {
+      readData();
+    });
   }
 
   const handleSubmit = (e) => {
