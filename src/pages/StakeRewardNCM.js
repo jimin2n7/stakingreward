@@ -61,9 +61,6 @@ const StakeRewardNCM = ({ signer, accountAddress }) => {
     await StakeNCMTContract.stakeToken(
       ethers.utils.parseUnits(`${amount}`, 18)
     );
-    StakeNCMTContract.on("Staked", (from, amount, event) => {
-      readData();
-    });
   }
 
   const handleSubmit = (e) => {
@@ -78,7 +75,6 @@ const StakeRewardNCM = ({ signer, accountAddress }) => {
       setrewardBalance(0);
       setIsUnStaked(true);
       setIsStaked(false);
-      readData();
     });
   }
 
