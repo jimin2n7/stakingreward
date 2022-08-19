@@ -61,6 +61,9 @@ const StakeRewardNCM = ({ signer, accountAddress }) => {
     await StakeNCMTContract.stakeToken(
       ethers.utils.parseUnits(`${amount}`, 18)
     );
+    StakeNCMTContract.on("Staked", (from, amount, event) => {
+      readData();
+    });
   }
 
   const handleSubmit = (e) => {
@@ -128,8 +131,12 @@ const StakeRewardNCM = ({ signer, accountAddress }) => {
             </div>
           ) : (
             <React.Fragment>
-              <StakeBtn staked={isStaked} type="submit">Stake</StakeBtn>
-              <UnstakeBtn unstaked={isUnStaked} onClick={handleUnstake}>Unstake</UnstakeBtn>
+              <StakeBtn staked={isStaked} type="submit">
+                Stake
+              </StakeBtn>
+              <UnstakeBtn unstaked={isUnStaked} onClick={handleUnstake}>
+                Unstake
+              </UnstakeBtn>
             </React.Fragment>
           )}
         </FormStake>
@@ -234,8 +241,8 @@ const StakeBtn = styled.button`
   height: 40px;
   margin-top: 20px;
   cursor: pointer;
-  pointer-events: ${props => (props.staked ? `none` : `visible`)};
-  opacity: ${props => (props.staked ? 0.5 : 1)};
+  pointer-events: ${(props) => (props.staked ? `none` : `visible`)};
+  opacity: ${(props) => (props.staked ? 0.5 : 1)};
   outline: none;
   border: none;
   background-color: #ffcc00;
@@ -254,8 +261,8 @@ const UnstakeBtn = styled.div`
   width: 50%;
   height: 40px;
   margin-top: 20px;
-  pointer-events: ${props => (props.unstaked ? `none` : `visible`)};
-  opacity: ${props => (props.unstaked ? 0.5 : 1)};
+  pointer-events: ${(props) => (props.unstaked ? `none` : `visible`)};
+  opacity: ${(props) => (props.unstaked ? 0.5 : 1)};
   cursor: pointer;
   outline: none;
   border: none;
