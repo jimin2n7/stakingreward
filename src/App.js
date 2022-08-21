@@ -2,6 +2,9 @@ import Header from "./components/Header";
 import React from "react";
 import { GlobalStyles } from "./GlobalStyles";
 import StakeRewardNCM from "./pages/StakeRewardNCM";
+import Main from "./components/Main";
+import ICO from "./pages/ICO";
+import { Routes, Route } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { ethers } from "ethers";
 function App() {
@@ -27,13 +30,6 @@ function App() {
     requestAccounts();
   }, [provider]);
 
-  useEffect(() => {
-    ethereum?.on("accountsChanged", requestAccounts);
-    return () => {
-      ethereum?.removeListener("accountsChanged", requestAccounts);
-    };
-  });
-
   const requestAccounts = async () => {
     try {
       if (!ethereum) {
@@ -46,14 +42,32 @@ function App() {
       setIsConnected(true);
     } catch (error) {
       setIsConnected(false);
+      setAccountAddress(null);
     }
   };
 
   return (
     <React.Fragment>
       <GlobalStyles />
-      <Header accountAddress={accountAddress} />
-      <StakeRewardNCM signer={signer} accountAddress={accountAddress} />
+      <Main
+        accountAddress={accountAddress}
+        isConnected={isConnected}
+        requestAccounts={requestAccounts}
+      >
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <StakeRewardNCM
+                signer={signer}
+                accountAddress={accountAddress}
+                isConnected={isConnected}
+              />
+            }
+          />
+          <Route path="/ICO" element={<ICO />} />
+        </Routes>
+      </Main>
     </React.Fragment>
   );
 }

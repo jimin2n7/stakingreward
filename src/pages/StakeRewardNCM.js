@@ -9,7 +9,6 @@ const StakeRewardNCM = ({ signer, accountAddress }) => {
   const [rewardBalance, setrewardBalance] = useState(0);
   const [approved, setApproval] = useState(false);
   const [isStaked, setIsStaked] = useState(false);
-  const [isUnStaked, setIsUnStaked] = useState(true);
   const inputRef = useRef();
   const NCMTContract = new ethers.Contract(
     "0x8D46fc4459df2900326E836349C6f0b08C738F2C",
@@ -31,6 +30,7 @@ const StakeRewardNCM = ({ signer, accountAddress }) => {
         );
         if (ethers.utils.formatUnits(checkApproval, 18) > 0) {
           setApproval(true);
+          setIsStaked(false);
         } else {
           setApproval(false);
         }
@@ -38,22 +38,32 @@ const StakeRewardNCM = ({ signer, accountAddress }) => {
       checkApprove();
 
       readData();
+    } else {
+      setrewardBalance(0);
+      setStakeBalance(0);
     }
   }, [accountAddress]);
 
   async function readData() {
-    const stakingBalance = await StakeNCMTContract.stakingBalance(
-      `${accountAddress}`
-    );
-    setStakeBalance(ethers.utils.formatUnits(stakingBalance, 18));
-    const rewardsBalance = await StakeNCMTContract.rewardCalculate();
-    setrewardBalance(ethers.utils.formatUnits(rewardsBalance, 18));
+    try {
+      if (accountAddress) {
+        const stakingBalance = await StakeNCMTContract.stakingBalance(
+          `${accountAddress}`
+        );
+        const rewardsBalance = await StakeNCMTContract.rewardCalculate();
 
-    const stakeStatus = await StakeNCMTContract.addressStaked(
-      `${accountAddress}`
-    );
-    setIsStaked(stakeStatus);
-    setIsUnStaked(!stakeStatus);
+        setStakeBalance(ethers.utils.formatUnits(stakingBalance, 18));
+        setrewardBalance(ethers.utils.formatUnits(rewardsBalance, 18));
+
+        const stakeStatus = await StakeNCMTContract.addressStaked(
+          `${accountAddress}`
+        );
+        setIsStaked(stakeStatus);
+      }
+    } catch (error) {
+      setrewardBalance(0);
+      setStakeBalance(0);
+    }
   }
 
   async function stakeTokens(amount) {
@@ -75,7 +85,6 @@ const StakeRewardNCM = ({ signer, accountAddress }) => {
     StakeNCMTContract.on("Claimed", (from, amount, event) => {
       setStakeBalance(0);
       setrewardBalance(0);
-      setIsUnStaked(true);
       setIsStaked(false);
     });
   }
@@ -85,74 +94,66 @@ const StakeRewardNCM = ({ signer, accountAddress }) => {
   };
 
   const handleApprove = async () => {
-    await NCMTContract.approve(
-      StakeNCMTContract.address,
-      ethers.utils.parseUnits("1000000000000000000", 18)
-    );
-    NCMTContract.on("Approval", (spender, amount, event) => {
-      if (amount > 0) {
-        setApproval(true);
-      }
-    });
+    if (accountAddress) {
+      await NCMTContract.approve(
+        StakeNCMTContract.address,
+        ethers.utils.parseUnits("1000000000000000000", 18)
+      );
+      NCMTContract.on("Approval", (spender, amount, event) => {
+        if (amount > 0) {
+          setApproval(true);
+        }
+      });
+    } else {
+      console.log("Please connect Metamask Wallet!");
+    }
   };
 
   return (
-    <Container>
-      <StakingPane>
-        <div className="staking-info">
-          <div className="balance">
-            <span className="balance-title">Staking Balance:</span>
-            <span className="balance-value">{stakeBalance} NCMT</span>
-          </div>
-          <div className="balance">
-            <span className="balance-title">Reward Balance:</span>
-            <span className="balance-value">{rewardBalance} NCMT</span>
-          </div>
+    <StakingPane>
+      <div className="staking-info">
+        <div className="balance">
+          <span className="balance-title">Staking Balance:</span>
+          <span className="balance-value">{stakeBalance} NCMT</span>
         </div>
-        <FormStake onSubmit={handleSubmit} className="form-stake">
-          <div className="label">
-            <label>Stake Tokens</label>
+        <div className="balance">
+          <span className="balance-title">Reward Balance:</span>
+          <span className="balance-value">{rewardBalance} NCMT</span>
+        </div>
+      </div>
+      <FormStake onSubmit={handleSubmit} className="form-stake">
+        <div className="label">
+          <label>Stake Tokens</label>
+        </div>
+        <div className="input-group">
+          <input
+            ref={inputRef}
+            type="number"
+            min="0"
+            name="numberTokens"
+            required
+            placeholder="0"
+          />
+        </div>
+        {accountAddress === null || (accountAddress != null && !approved) ? (
+          <div className="approve-btn" onClick={handleApprove}>
+            Approve Tokens
           </div>
-          <div className="input-group">
-            <input
-              ref={inputRef}
-              type="number"
-              min="0"
-              name="numberTokens"
-              required
-              placeholder="0"
-            />
-          </div>
-          {!approved ? (
-            <div className="approve-btn" onClick={handleApprove}>
-              Approve Tokens
-            </div>
-          ) : (
-            <React.Fragment>
-              <StakeBtn staked={isStaked} type="submit">
-                Stake
-              </StakeBtn>
-              <UnstakeBtn unstaked={isUnStaked} onClick={handleUnstake}>
-                Unstake
-              </UnstakeBtn>
-            </React.Fragment>
-          )}
-        </FormStake>
-      </StakingPane>
-    </Container>
+        ) : (
+          <React.Fragment>
+            <StakeBtn staked={isStaked} type="submit">
+              Stake
+            </StakeBtn>
+            <UnstakeBtn staked={isStaked} onClick={handleUnstake}>
+              Unstake
+            </UnstakeBtn>
+          </React.Fragment>
+        )}
+      </FormStake>
+    </StakingPane>
   );
 };
 
-const Container = styled.div`
-  margin-top: 45px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-  max-width: 1170px;
-  margin: 0 auto;
-  padding: 0 15px;
-`;
 const StakingPane = styled.div`
   display: flex;
   flex-direction: column;
@@ -259,8 +260,8 @@ const UnstakeBtn = styled.div`
   width: 50%;
   height: 40px;
   margin-top: 20px;
-  pointer-events: ${(props) => (props.unstaked ? `none` : `visible`)};
-  opacity: ${(props) => (props.unstaked ? 0.5 : 1)};
+  pointer-events: ${(props) => (props.staked ? `visible` : `none`)};
+  opacity: ${(props) => (props.staked ? 1 : 0.5)};
   cursor: pointer;
   outline: none;
   border: none;
