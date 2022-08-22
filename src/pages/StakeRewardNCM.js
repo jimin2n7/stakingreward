@@ -159,8 +159,7 @@ const StakingPane = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 50px 0;
-  width: 700px;
+  width:700px;
   .staking-info {
     display: flex;
     align-items: center;
@@ -190,7 +189,7 @@ const FormStake = styled.form`
   width: 100%;
   height: 100%;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-  border-radius: 5px;
+  border-radius: 20px;
   padding: 50px;
   .label {
     align-self: flex-start;
@@ -223,7 +222,7 @@ const FormStake = styled.form`
     outline: none;
     border: none;
     background-color: #ffcc00;
-    border-radius: 2px;
+    border-radius: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -245,7 +244,7 @@ const StakeBtn = styled.button`
   outline: none;
   border: none;
   background-color: #ffcc00;
-  border-radius: 2px;
+  border-radius: 10px;
   text-align: center;
   font-size: 18px;
   &:hover {
@@ -266,7 +265,7 @@ const UnstakeBtn = styled.div`
   outline: none;
   border: none;
   background-color: #ffcc00;
-  border-radius: 2px;
+  border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;

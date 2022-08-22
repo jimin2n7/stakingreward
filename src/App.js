@@ -58,14 +58,13 @@ function App() {
           <Route
             path="/"
             element={
-              <StakeRewardNCM
-                signer={signer}
-                accountAddress={accountAddress}
-                isConnected={isConnected}
-              />
+              <StakeRewardNCM signer={signer} accountAddress={accountAddress} />
             }
           />
-          <Route path="/ICO" element={<ICO />} />
+          <Route
+            path="/ICO"
+            element={<ICO signer={signer} accountAddress={accountAddress} />}
+          />
         </Routes>
       </Main>
     </React.Fragment>
