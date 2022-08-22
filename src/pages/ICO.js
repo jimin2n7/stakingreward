@@ -118,11 +118,11 @@ const ICO = ({ signer, accountAddress }) => {
       <div className="staking-info">
         <div className="balance">
           <span className="balance-title">Total Supply:</span>
-          <span className="balance-value">{totalSupply} MTK</span>
+          <span className="balance-value">{totalSupply} MinToKen</span>
         </div>
         <div className="balance">
           <span className="balance-title">Available For Sale:</span>
-          <span className="balance-value">{available} MTK</span>
+          <span className="balance-value">{available} MinToKen</span>
         </div>
         <div className="balance">
           <span className="balance-title">Price:</span>
@@ -130,7 +130,7 @@ const ICO = ({ signer, accountAddress }) => {
         </div>
         <div className="balance">
           <span className="balance-title">Balance:</span>
-          <span className="balance-value">{balance} MTK</span>
+          <span className="balance-value">{balance} MinToKen</span>
         </div>
       </div>
       <FormICO onSubmit={handleSubmit} className="form-stake">
