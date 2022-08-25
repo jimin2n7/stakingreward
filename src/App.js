@@ -4,6 +4,7 @@ import { GlobalStyles } from "./GlobalStyles";
 import StakeRewardNCM from "./pages/StakeRewardNCM";
 import Main from "./components/Main";
 import ICO from "./pages/ICO";
+import Airdrop from "./pages/Airdrop";
 import { Routes, Route } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { ethers } from "ethers";
@@ -62,8 +63,12 @@ function App() {
             }
           />
           <Route
-            path="/ICO"
+            path="/ico"
             element={<ICO signer={signer} accountAddress={accountAddress} />}
+          />
+          <Route
+            path="/airdrop"
+            element={<Airdrop signer={signer} accountAddress={accountAddress} />}
           />
         </Routes>
       </Main>

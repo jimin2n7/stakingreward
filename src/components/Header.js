@@ -34,6 +34,7 @@ const HeaderPane = styled.div`
   z-index: 10;
   height: 60px;
   background-color: #000;
+  border-bottom: 5px solid #ffcc00;
 `;
 const Container = styled.div`
   max-width: 1170px;

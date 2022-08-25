@@ -12,6 +12,9 @@ const Sidebar = () => {
         <Item>
           <Link to={"/ico"}>ICO</Link>
         </Item>
+        <Item>
+          <Link to={"/airdrop"}>Airdrop</Link>
+        </Item>
       </Menu>
     </SidebarPane>
   );
@@ -40,6 +43,10 @@ const Item = styled.li`
   width: 100%;
   height: 50px;
   &:hover {
+    background-color: rgb(64, 64, 64);
+    transition: all ease 0.5s;
+  }
+  &:active {
     background-color: rgb(64, 64, 64);
     transition: all ease 0.5s;
   }
