@@ -11,7 +11,7 @@ const Airdrop = ({ signer, accountAddress }) => {
   const [rewardAmount, setRewardAmount] = useState(0);
   const [tree, setTree] = useState();
   const AirdropContract = new ethers.Contract(
-    "0xb015479175C56EEE548fF78E8E5Ce02E07E9bF50",
+    "0x5745eeDbde28D0151B0e167CFAe34b8C626E351D",
     AirdropMAM,
     signer
   );
@@ -37,7 +37,7 @@ const Airdrop = ({ signer, accountAddress }) => {
           tree.verify(
             proof,
             leaf,
-            "0x93e37c20fb939ffc92a5f52c2c9fa28eae9863bc61ab433addae133320e94f10"
+            "0xd87f0e8a3888c2157497ce6794b784b003fb7bdbcbabd3af06cfc80f5e8516dd"
           )
         ) {
           checkClaimed();
